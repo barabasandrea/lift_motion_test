@@ -9,21 +9,25 @@ namespace App\Model;
  */
 class UpDownDisplay {
 
+    const UP = 'UP';
+    const DOWN = 'DOWN';
+    const BLANK = 'BLANK';
+
     /**
      * @var string
      */
-    private $status = 'BLANK';
+    private $status = self::BLANK;
 
     public function setUp() {
-        $this->status = 'UP';
+        $this->status = self::UP;
     }
 
     public function setDown() {
-        $this->status = 'DOWN';
+        $this->status = self::DOWN;
     }
 
     public function clearStatus() {
-        $this->status = 'BLANK';
+        $this->status = self::BLANK;
     }
 
     public function show(): string
