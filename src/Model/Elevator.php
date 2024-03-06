@@ -27,7 +27,8 @@ class Elevator {
         $this->display->setNumber($currentPosition);
     }
 
-    public function getCurrentPosition() {
+    public function getCurrentPosition(): int
+    {
         return $this->currentPosition;
     }
 
@@ -37,13 +38,11 @@ class Elevator {
     }
 
     public function moveUp() {
-        // check h minusz ne lehessen
         $this->currentPosition++;
         $this->display->setNumber($this->currentPosition);
     }
 
     public function moveDown() {
-        // check h minusz ne lehessen
         $this->currentPosition--;
         $this->display->setNumber($this->currentPosition);
     }

@@ -41,6 +41,4 @@ class ElevatorShaft
         return $this->floors;
     }
 
-
-
 }

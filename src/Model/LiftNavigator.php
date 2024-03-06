@@ -84,7 +84,8 @@ class LiftNavigator {
         return null;
     }
 
-    public function move() {
+    public function move(): bool
+    {
         $moved = false;
         foreach ($this->destinations as $key => $destionationFloor) {
             $currentElevator = $this->elevatorShafts[$key]->getElevator();

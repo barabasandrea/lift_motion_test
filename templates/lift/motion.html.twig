@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome!</title>
+</head>
+<body>
+{% set template %}
+    <h1>I want to go from the {{ callInFloor }} floor to the {{ pressDestination }} floor</h1>
+    <table width="100%">
+        <h2>Calling</h2>
+        {% set liftMoving = true %}
+        {% for liftMoving in [true] %}
+            {% do liftNavigator.move() %}
+            {% if liftMoving %}
+                <tr>
+                    {% for key, shaft in liftNavigator.getShafts() %}
+                        <td width="50%">
+                <pre>
+                    <h1>Elevator {{ key }}</h1>
+                    Lift {{ key }} position: {{ shaft.getElevator().getDisplay().show() }}
+                    <h2>Door statuses:</h2>
+                    {% for floorNumber, floor in shaft.getFloors() %}
+                        <br>Up down display show in floor {{ floorNumber }} : {{ floor.getUpDownDisplay().show() }}
+                    {% endfor %}
+                </pre>
+                            <hr>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    <h2>The elevator has arrived at the {{ callInFloor }}th floor</h2>
+    <hr>
+    <h2>I get into the elevator and head to the {{ pressDestination }}rd floor</h2>
+    <table width="100%">
+        {% set shaftId = liftNavigator.getElevatorShaftIdWhereElevatorInFloor(callInFloor) %}
+        {% do liftNavigator.pressDestination(shaftId, pressDestination) %}
+        {% set liftMoving = true %}
+        {% for liftMoving in [true] %}
+            {% do liftNavigator.move() %}
+            {% if liftMoving %}
+                <tr>
+                    {% for key, shaft in liftNavigator.getShafts() %}
+                        <td width="50%">
+                <pre>
+                    <h1>Elevator {{ key }}</h1>
+                    Lift {{ key }} position: {{ shaft.getElevator().getDisplay().show() }}
+                    <h2>Door statuses:</h2>
+                    {% for floorNumber, floor in shaft.getFloors() %}
+                        <br>Up down display show in floor {{ floorNumber }} : {{ floor.getUpDownDisplay().show() }}
+                    {% endfor %}
+                </pre>
+                            <hr>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    <h2>DONE</h2>
+{% endset %}
+{{ template|raw }}
+</body>
+</html>
+

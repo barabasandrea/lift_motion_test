@@ -10,12 +10,14 @@ use App\Model\ElevatorShaft;
 use App\Model\Floor;
 use App\Model\LiftNavigator;
 use App\Model\UpDownDisplay;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class LiftController
+class LiftController extends AbstractController
 {
 
-    private function renderRow($liftNavigator) {
+    private function renderRow($liftNavigator): string
+    {
         $template = '<tr>';
         foreach ($liftNavigator->getShafts() as $key => $shaft) {
 
@@ -34,34 +36,12 @@ class LiftController
         return $template;
     }
 
-    public function motion(): Response
+    public function motion(int $callInFloor, int $pressDestination): Response
     {
-        // from parameters
-        $callInFloor = 5;
-        $pressDestination = 3;
-
         $elevatorShafts = [];
 
-        $elevatorShafts[] = new ElevatorShaft(new Elevator(new Display(), 0), [
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-        ]);
-
-        $elevatorShafts[] = new ElevatorShaft(new Elevator(new Display(), 6), [
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-            new Floor(new UpDownDisplay()),
-        ]);
-
+        $elevatorShafts[] = $this->createElevatorShafts(0);
+        $elevatorShafts[] = $this->createElevatorShafts(6);
 
         $liftNavigator = new LiftNavigator($elevatorShafts);
 
@@ -74,15 +54,16 @@ class LiftController
 
 
         $template .= '<h2>Calling</h2>';
+
         do {
             $template .= $this->renderRow($liftNavigator);
         } while ($liftNavigator->move());
 
 
         $template .= '</table>';
-        $template .= '<h4>Lift megerkezett az emberunkert</h4>';
+        $template .= sprintf('<h2>The elevator has arrived at the %sth floor</h2>', $callInFloor) ;
         $template .= '<hr>';
-        $template .= '<h2>Emberunk beszall es elinditja a liftet a celjahoz</h2>';
+        $template .= sprintf('<h2>I get into the elevator and head to the %srd floor</h2>', $pressDestination);
 
 
         $template .= '<table width="100%">';
@@ -95,11 +76,35 @@ class LiftController
         } while ($liftNavigator->move());
 
         $template .= '</table>';
-        $template .= 'DONE';
+        $template .= '<h2>DONE</h2>';
 
         return new Response(
             sprintf('<html><body>%s</body></html>', $template)
         );
+/*
+        return $this->render('lift/motion.html.twig', [
+            'liftNavigator' => $liftNavigator,
+            'callInFloor' => $callInFloor,
+            'pressDestination' => $pressDestination,
+        ]);
+*/
+    }
+
+    /**
+     * @param int $currentPosition
+     * @return ElevatorShaft
+     */
+    public function createElevatorShafts(int $currentPosition): ElevatorShaft
+    {
+        return new ElevatorShaft(new Elevator(new Display(), $currentPosition), [
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+            new Floor(new UpDownDisplay()),
+        ]);
     }
 
 

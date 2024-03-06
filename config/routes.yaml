@@ -3,5 +3,5 @@
 #    controller: App\Controller\DefaultController::index
 
 app_lift:
-  path: /lift/motion
+  path: /{callInFloor}/lift/{pressDestination}/motion
   controller: App\Controller\LiftController::motion
