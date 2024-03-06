@@ -8,33 +8,13 @@ use App\Model\Display;
 use App\Model\Elevator;
 use App\Model\ElevatorShaft;
 use App\Model\Floor;
-use App\Model\LiftNavigator;
+use App\Services\LiftNavigatorService;
 use App\Model\UpDownDisplay;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class LiftController extends AbstractController
 {
-
-    private function renderRow($liftNavigator): string
-    {
-        $template = '<tr>';
-        foreach ($liftNavigator->getShafts() as $key => $shaft) {
-
-            $template .= '<td width="50%"><pre>';
-            $template .= '<h1>Elevator ' . $key . '</h1>';
-            $template .= sprintf('Lift %s position: %s', $key, $shaft->getElevator()->getDisplay()->show());
-            $template .= '<h2>Door statuses:</h2>';
-            foreach ($shaft->getFloors() as $floorNumber => $floor) {
-                $template .= sprintf('<br>Up down display show in floor %s : %s', $floorNumber, $floor->getUpDownDisplay()->show());
-            }
-
-            $template .= '</pre><hr></td>';
-        }
-        $template .= '</tr>';
-
-        return $template;
-    }
 
     public function motion(int $callInFloor, int $pressDestination): Response
     {
@@ -43,10 +23,9 @@ class LiftController extends AbstractController
         $elevatorShafts[] = $this->createElevatorShafts(0);
         $elevatorShafts[] = $this->createElevatorShafts(6);
 
-        $liftNavigator = new LiftNavigator($elevatorShafts);
+        $liftNavigator = new LiftNavigatorService($elevatorShafts);
 
         $liftNavigator->callInFloor($callInFloor);
-
 
         $template = sprintf('<h1>I want to go from the %s floor to the %s floor</h1>', $callInFloor, $pressDestination);
 
@@ -88,6 +67,30 @@ class LiftController extends AbstractController
             'pressDestination' => $pressDestination,
         ]);
 */
+    }
+
+    private function renderRow($liftNavigator): string
+    {
+        $template = '<tr>';
+
+        foreach ($liftNavigator->getShafts() as $key => $shaft) {
+
+            $actualPosition = $shaft->getElevator()->getDisplay()->show();
+            $segments = implode(':', $shaft->getElevator()->getDisplay()->displayNumber($actualPosition));
+
+            $template .= '<td width="50%"><pre>';
+            $template .= '<h1>Elevator ' . $key . '</h1>';
+            $template .= sprintf('Lift %s position: %s, %s', $key, $actualPosition, $segments);
+            $template .= '<h2>Door statuses:</h2>';
+            foreach ($shaft->getFloors() as $floorNumber => $floor) {
+                $template .= sprintf('<br>Up down display show in floor %s : %s', $floorNumber, $floor->getUpDownDisplay()->show());
+            }
+
+            $template .= '</pre><hr></td>';
+        }
+        $template .= '</tr>';
+
+        return $template;
     }
 
     /**

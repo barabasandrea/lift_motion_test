@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Services;
 
 
 /**
  * Az emeleten levő lift "hívó"
  */
-class LiftNavigator {
+class LiftNavigatorService {
 
     protected $destinations = [];
 
@@ -33,7 +33,12 @@ class LiftNavigator {
         return $this->elevatorShafts;
     }
 
-    public function callInFloor(int $floor) {
+    /**
+     * @param int $floor
+     * @return void
+     */
+    public function callInFloor(int $floor)
+    {
 
         // hivjuk: 5
         //   liftakna:
@@ -60,6 +65,11 @@ class LiftNavigator {
         }
     }
 
+    /**
+     * @param int $elevatorShaftId
+     * @param int $destinationFloor
+     * @return void
+     */
     public function pressDestination(int $elevatorShaftId, int $destinationFloor)
     {
         $elevatorShaft = $this->elevatorShafts[$elevatorShaftId];
@@ -74,16 +84,23 @@ class LiftNavigator {
         }
     }
 
+    /**
+     * @param int $floor
+     * @return int|null
+     */
     public function getElevatorShaftIdWhereElevatorInFloor(int $floor) {
         foreach ($this->elevatorShafts as $key => $shaft) {
             if ($shaft->getElevator()->getCurrentPosition() === $floor) {
-                return $key;
+                return (int)$key;
             }
         }
 
         return null;
     }
 
+    /**
+     * @return bool
+     */
     public function move(): bool
     {
         $moved = false;
