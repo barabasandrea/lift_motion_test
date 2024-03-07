@@ -59,7 +59,7 @@ class Display {
             case 5:
                 return [true,   false,   true,   true,   false,   true,  true];
             case 6:
-                return [true,   false,   true,   true,   true,   true,  false];
+                return [true,   false,   true,   true,   true,   true,  true];
             default:
                 return [true,   true,   true,   true,   true,   true,  false];
         }
