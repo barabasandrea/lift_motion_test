@@ -47,7 +47,7 @@ class LiftNavigatorService {
         $distance = [];
 
         foreach ($this->elevatorShafts as $key => $shaft) {
-            // adott lift aktuális pozicíó
+            // adott lift aktuális pozicíó és kért pozicíó közti távolság
             $distance[$key] = abs($floor - $shaft->getElevator()->getCurrentPosition());
         }
 
