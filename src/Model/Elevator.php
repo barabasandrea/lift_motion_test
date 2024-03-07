@@ -20,6 +20,10 @@ class Elevator {
      */
     protected $currentPosition;
 
+    /**
+     * @param Display $display
+     * @param int $currentPosition
+     */
     public function __construct(Display $display, int $currentPosition = 0) {
         $this->display = $display;
         $this->currentPosition = $currentPosition;
@@ -27,21 +31,33 @@ class Elevator {
         $this->display->setNumber($currentPosition);
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentPosition(): int
     {
         return $this->currentPosition;
     }
 
+    /**
+     * @return Display
+     */
     public function getDisplay(): Display
     {
         return $this->display;
     }
 
+    /**
+     * @return void
+     */
     public function moveUp() {
         $this->currentPosition++;
         $this->display->setNumber($this->currentPosition);
     }
 
+    /**
+     * @return void
+     */
     public function moveDown() {
         $this->currentPosition--;
         $this->display->setNumber($this->currentPosition);

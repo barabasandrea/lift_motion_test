@@ -15,11 +15,17 @@ class Floor {
      */
     private $upDownDisplay;
 
+    /**
+     * @param UpDownDisplay $upDownDisplay
+     */
     public function __construct(UpDownDisplay $upDownDisplay )
     {
         $this->upDownDisplay = $upDownDisplay;
     }
 
+    /**
+     * @return UpDownDisplay
+     */
     public function getUpDownDisplay(): UpDownDisplay
     {
         return $this->upDownDisplay;

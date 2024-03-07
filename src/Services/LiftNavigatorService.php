@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace App\Services;
 
 
+use App\Model\ElevatorShaft;
+
 /**
  * Az emeleten levő lift "hívó"
  */
 class LiftNavigatorService {
 
+    /**
+     * @var array
+     */
     protected $destinations = [];
 
     /**
@@ -28,6 +33,9 @@ class LiftNavigatorService {
         }
     }
 
+    /**
+     * @return ElevatorShaft[]
+     */
     public function getShafts(): array
     {
         return $this->elevatorShafts;

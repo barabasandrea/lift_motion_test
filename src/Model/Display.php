@@ -14,18 +14,31 @@ class Display {
      */
     protected $number;
 
+    /**
+     * @var array
+     */
     protected $segments = [];
 
+    /**
+     * @return array
+     */
     public function displayNumber():array {
         $this->segments = $this->getSegments();
         return array_map('intval', $this->segments);
     }
 
+    /**
+     * @return int
+     */
     public function show(): int
     {
         return $this->number;
     }
 
+    /**
+     * @param int $currentPosition
+     * @return void
+     */
     public function setNumber(int $currentPosition)
     {
         $this->number = $currentPosition;
@@ -44,6 +57,9 @@ class Display {
      *
      * */
 
+    /**
+     * @return array
+     */
     public function getSegments(): array
     {
         switch ($this->number) {

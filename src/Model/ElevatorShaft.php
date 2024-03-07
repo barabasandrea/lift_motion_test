@@ -31,11 +31,17 @@ class ElevatorShaft
         $this->floors = $floors;
     }
 
+    /**
+     * @return Elevator
+     */
     public function getElevator(): Elevator
     {
         return $this->elevator;
     }
 
+    /**
+     * @return Floor[]
+     */
     public function getFloors(): array
     {
         return $this->floors;
