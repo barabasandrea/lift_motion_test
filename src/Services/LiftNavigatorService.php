@@ -63,14 +63,7 @@ class LiftNavigatorService {
         $elevatorShaft = $this->elevatorShafts[$mustSendThisLift];
 
         $this->destinations[$mustSendThisLift] = $floor;
-
-        foreach ($elevatorShaft->getFloors() as $currentFloor) {
-            if ($floor < $elevatorShaft->getElevator()->getCurrentPosition()) {
-                $currentFloor->getUpDownDisplay()->setDown();
-            } else {
-                $currentFloor->getUpDownDisplay()->setUp();
-            }
-        }
+        $this->updateUpDownDisplay($elevatorShaft, $floor);
     }
 
     /**
@@ -82,14 +75,7 @@ class LiftNavigatorService {
     {
         $elevatorShaft = $this->elevatorShafts[$elevatorShaftId];
         $this->destinations[$elevatorShaftId] = $destinationFloor;
-
-        foreach ($elevatorShaft->getFloors() as $currentFloor) {
-            if ($destinationFloor < $elevatorShaft->getElevator()->getCurrentPosition()) {
-                $currentFloor->getUpDownDisplay()->setDown();
-            } else {
-                $currentFloor->getUpDownDisplay()->setUp();
-            }
-        }
+        $this->updateUpDownDisplay($elevatorShaft, $destinationFloor);
     }
 
     /**
@@ -131,6 +117,22 @@ class LiftNavigatorService {
 
 
         return (bool) $moved;
+    }
+
+    /**
+     * @param ElevatorShaft $elevatorShaft
+     * @param int $floor
+     * @return void
+     */
+    public function updateUpDownDisplay(ElevatorShaft $elevatorShaft, int $floor)
+    {
+        foreach ($elevatorShaft->getFloors() as $currentFloor) {
+            if ($floor < $elevatorShaft->getElevator()->getCurrentPosition()) {
+                $currentFloor->getUpDownDisplay()->setDown();
+            } else {
+                $currentFloor->getUpDownDisplay()->setUp();
+            }
+        }
     }
 
 }
